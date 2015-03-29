@@ -5,57 +5,256 @@
     android:background="@drawable/bg_index"
     tools:context=".MainActivity">
 
+    <com.example.guoziwen.myapplication.MyViewGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/shield__image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_shield"
+                android:paddingLeft="10dp"
+                />
+            <TextView
+                android:id="@+id/shield"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="任意盾"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_toRightOf="@id/shield__image"
+                android:paddingLeft="5dp"/>
+            <TextView
+                android:id="@+id/shield_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="300"
+                android:textColor="@android:color/white"
+                android:layout_below="@id/shield"
+                android:layout_alignLeft="@id/shield"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="可信度"
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@id/shield_title"
+                android:layout_alignBottom="@id/shield_title"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/shopping_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_shopping"
+                android:paddingLeft="10dp"
+                />
+            <TextView
+                android:id="@+id/shopping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="任意购"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_toRightOf="@id/shopping_image"
+                android:paddingLeft="5dp"/>
+            <TextView
+                android:id="@+id/shopping_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="600"
+                android:textColor="@android:color/white"
+                android:layout_below="@id/shopping"
+                android:layout_alignLeft="@id/shopping"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="可信度"
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@id/shopping_title"
+                android:layout_alignBottom="@id/shopping_title"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/pay_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_pay"
+                android:paddingLeft="10dp"
+                />
+            <TextView
+                android:id="@+id/pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="任意缴"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_toRightOf="@id/pay_image"
+                android:paddingLeft="5dp"/>
+            <TextView
+                android:id="@+id/pay_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="650"
+                android:textColor="@android:color/white"
+                android:layout_below="@id/pay"
+                android:layout_alignLeft="@id/pay"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="可信度"
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@id/pay_title"
+                android:layout_alignBottom="@id/pay_title"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/loan_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/icon_loan"
+                android:paddingLeft="10dp"
+                />
+            <TextView
+                android:id="@+id/loan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="任意贷"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_toRightOf="@id/loan_image"
+                android:paddingLeft="5dp"/>
+            <TextView
+                android:id="@+id/loan_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="680"
+                android:textColor="@android:color/white"
+                android:layout_below="@id/loan"
+                android:layout_alignLeft="@id/loan"
+                android:textSize="16sp"
+                android:paddingLeft="5dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="可信度"
+                android:textColor="@android:color/white"
+                android:layout_toRightOf="@id/loan_title"
+                android:layout_alignBottom="@id/loan_title"
+                android:textSize="12sp"/>
+        </RelativeLayout>
+
+    </com.example.guoziwen.myapplication.MyViewGroup>
+
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
-        android:paddingLeft="0dp"
+        android:layout_marginLeft="-60dp"
         android:src="@drawable/bg_line_noscore" />
+
     <LinearLayout
         android:id="@+id/score_area"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="240dp"
         android:gravity="center"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="240dp">
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/score_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="可信度"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/score_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="可信度"
+            android:textColor="@android:color/white"
+            android:textSize="26sp" />
 
-    <TextView
-        android:id="@+id/score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="698"
-        android:textColor="@android:color/white"
-        android:textSize="78sp" />
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="698"
+            android:textColor="@android:color/white"
+            android:textSize="78sp" />
 
-    <TextView
-        android:id="@+id/update_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="更新时间 2015.02.24"
-        android:textColor="@android:color/white"
-        android:textSize="16sp" />
-    <ImageButton
-        android:id="@+id/check_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/icon_index_level"/>
+        <TextView
+            android:id="@+id/update_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="更新时间 2015.2.24"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <ImageButton
+            android:id="@+id/check_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/icon_index_level" />
     </LinearLayout>
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_index_logo_small"
-        android:layout_toRightOf="@id/score_area"
         android:layout_alignTop="@id/score_area"
-        android:layout_marginTop="35dp"/>
+        android:layout_marginTop="55dp"
+        android:layout_toRightOf="@id/score_area"
+        android:src="@drawable/icon_index_logo_small" />
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_index_score">
+
+        <TextView
+            android:id="@+id/rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:text="78"
+            android:textColor="@android:color/white"
+            android:textSize="48sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/rank"
+            android:layout_marginBottom="10dp"
+            android:layout_toRightOf="@id/rank"
+            android:text="%"
+            android:textColor="@android:color/white"
+            android:textSize="28sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rank"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-10dp"
+            android:text="击败用户"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
 </RelativeLayout>
