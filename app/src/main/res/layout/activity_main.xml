@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_index"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:paddingLeft="0dp"
+        android:src="@drawable/bg_line_noscore" />
+    <LinearLayout
+        android:id="@+id/score_area"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="240dp">
+
+    <TextView
+        android:id="@+id/score_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="可信度"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="698"
+        android:textColor="@android:color/white"
+        android:textSize="78sp" />
+
+    <TextView
+        android:id="@+id/update_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="更新时间 2015.02.24"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+    <ImageButton
+        android:id="@+id/check_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/icon_index_level"/>
+    </LinearLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_index_logo_small"
+        android:layout_toRightOf="@id/score_area"
+        android:layout_alignTop="@id/score_area"
+        android:layout_marginTop="35dp"/>
+
+</RelativeLayout>
