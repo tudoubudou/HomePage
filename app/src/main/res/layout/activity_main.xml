@@ -163,12 +163,12 @@
 
     </com.example.guoziwen.myapplication.MyViewGroup>
 
-    <ImageView
+    <!--<ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="-60dp"
-        android:src="@drawable/bg_line_noscore" />
+        android:src="@drawable/bg_line_noscore" />-->
 
     <LinearLayout
         android:id="@+id/score_area"
@@ -210,14 +210,6 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/icon_index_level" />
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/score_area"
-        android:layout_marginTop="55dp"
-        android:layout_toRightOf="@id/score_area"
-        android:src="@drawable/icon_index_logo_small" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
