@@ -1,15 +1,22 @@
 package com.example.guoziwen.myapplication;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.RectF;
+import android.graphics.SweepGradient;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Scroller;
@@ -38,11 +45,24 @@ public class MyViewGroup extends FrameLayout{
     private float mTouchX;
     private double initAngel = -Math.PI/6;
     private double realAngel = initAngel;
+
+    private double displayRangeAngel = 2*Math.PI/3;
+    private double angelDistance = Math.PI/4;
+
+    private double cursorRealAngel = initAngel + angelDistance;
+
+    private double dotsInitAngel = -Math.PI/2;
+    private double dotsRealAngel = dotsInitAngel;
+    private double dotsAngelInterval = Math.PI/6;
+    private double dotsCursorDis = cursorRealAngel - dotsInitAngel;
+
     private float circleR = 480.0f;
     private float circleX = -90.0f;
     private float circleY = 580.0f;
     private float circle_text_distance = 40.0f;
     private float circle_stroke_width = 30.0f;
+    public final String cursor_tag = "image_cursor_tag";
+    ImageView circleCursor;
 
 
     public MyViewGroup(Context context) {
@@ -66,20 +86,22 @@ public class MyViewGroup extends FrameLayout{
         paint = new Paint();
         final ViewConfiguration configuration = ViewConfiguration.get(getContext());
         mTouchSlop = configuration.getScaledTouchSlop();
-        ImageView circleCursor = new ImageView(context);
+        circleCursor = new ImageView(context);
         addView(circleCursor);
         circleCursor.setScaleType(ImageView.ScaleType.CENTER);
-//        circleCursor.setAdjustViewBounds(true);
         ViewGroup.LayoutParams lp = circleCursor.getLayoutParams();
         lp.width = LayoutParams.WRAP_CONTENT;
         lp.height = LayoutParams.WRAP_CONTENT;
         circleCursor.setLayoutParams(lp);
         circleCursor.setImageDrawable(context.getResources().getDrawable(R.drawable.icon_index_loacation));
+        circleCursor.setTag(cursor_tag);
+        Animation fadeAnim = AnimationUtils.loadAnimation(context, R.anim.fade_inout);
+        circleCursor.startAnimation(fadeAnim);
     }
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         final int count = getChildCount();
-        double step = 2 * Math.PI/(3*(count));
+        double step = displayRangeAngel / count;
         double tempAngel = realAngel;
         double alpha = 1.0;
         for (int i = 0; i < count; i++) {
@@ -96,27 +118,62 @@ public class MyViewGroup extends FrameLayout{
             }else if(child instanceof ImageView){
                 final int childWidth = child.getMeasuredWidth();
                 final int childHeight = child.getMeasuredHeight();
-                int locationX = (int)Math.round((circleR - circle_stroke_width/2) * Math.cos(realAngel + Math.PI/6) + circleX);
-                int locationY = screenH - (int)Math.round((circleR  - circle_stroke_width/2)* Math.sin(realAngel + Math.PI/6) + circleY);
-                child.layout(locationX-childWidth/2,locationY-childHeight/2,locationX-childWidth/2+childWidth,locationY-childHeight/2+childHeight);
-                android.util.Log.e("gzw", " angel=" + (realAngel+Math.PI/3) * 180 / Math.PI + " locx= " +locationX + " locy=" + locationY);
-                android.util.Log.e("gzw", " circelR =" + circleR + " x=" + circleX + " y=" + circleY);
+                int locationX = (int)Math.round((circleR - circle_stroke_width/2) * Math.cos(cursorRealAngel) + circleX);
+                int locationY = screenH - (int)Math.round((circleR  - circle_stroke_width/2)* Math.sin(cursorRealAngel) + circleY);
+                child.layout(locationX - childWidth / 2, locationY - childHeight / 2, locationX - childWidth / 2 + childWidth, locationY - childHeight / 2 + childHeight);
+                android.util.Log.e("gzw", " circel R =" + circleR + " x=" + circleX + " y=" + circleY);
             }
         }
     }
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
         paint.reset();
         paint.setAntiAlias(true);
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeJoin(Paint.Join.ROUND);
-        canvas.drawCircle(circleX, screenH - circleY, circleR, paint);
+        canvas.drawCircle(circleX, screenH - circleY, circleR+2, paint);
         paint.setStrokeWidth(circle_stroke_width);
         paint.setColor(Color.BLACK);
         paint.setAlpha(25);
         canvas.drawCircle(circleX, screenH - circleY, circleR - circle_stroke_width / 2, paint);
+        paint.reset();
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setColor(Color.GREEN);
+        paint.setStrokeWidth(circle_stroke_width);
+        float[] positions = {40f/360f,60f/360f,150f/360f};
+        SweepGradient mySweepGrdient = new SweepGradient(circleX, circleY, new int[] {0xff3fccf4,0xff5dd6b2,0xffffa65e}, positions);
+        paint.setShader(mySweepGrdient);
+        RectF r = new RectF(circleX-(circleR - circle_stroke_width / 2),screenH-circleY-(circleR - circle_stroke_width / 2),circleX+(circleR - circle_stroke_width / 2),screenH-circleY+(circleR - circle_stroke_width / 2));
+        canvas.save();
+        canvas.rotate((float) (-1.0 * cursorRealAngel * 180.0 / Math.PI), circleX, screenH - circleY);
+        canvas.drawArc(r, 0, 180, false, paint);
+        canvas.restore();
+        if(circleCursor != null){
+            paint.reset();
+            paint.setColor(0xff3fccf4);
+            paint.setStyle(Paint.Style.FILL);
+            paint.setAntiAlias(true);
+            int x = circleCursor.getLeft() + circleCursor.getWidth()/2;
+            int y = circleCursor.getTop() + circleCursor.getHeight()/2;
+            canvas.drawCircle(x,y,circleCursor.getWidth()/3,paint);
+            paint.setColor(Color.WHITE);
+            canvas.save();
+            for(double temp = dotsRealAngel;temp < Math.PI;temp += dotsAngelInterval){
+                if(Math.abs(temp - cursorRealAngel) > dotsAngelInterval/2 && temp < cursorRealAngel){
+                    if(temp == dotsRealAngel){
+                        canvas.rotate((float)(-dotsRealAngel * 180 / Math.PI),circleX, screenH - circleY);
+                    }else {
+                        canvas.rotate((float)(-dotsAngelInterval * 180 / Math.PI),circleX, screenH - circleY);
+                    }
+                    canvas.drawCircle(circleX + circleR - circle_stroke_width /2,screenH - circleY - circle_stroke_width /2,circleCursor.getWidth()/12,paint);
+                }
+            }
+            canvas.restore();
+        }
+        super.dispatchDraw(canvas);
     }
     private void acquireVelocityTrackerAndAddMovement(MotionEvent ev) {
         if (mVelocityTracker == null) {
@@ -263,6 +320,8 @@ public class MyViewGroup extends FrameLayout{
                     if (deltaY < 0) {
                         if(realAngel > initAngel - Math.PI/6){
                             realAngel -= 0.04;
+                            cursorRealAngel = realAngel + angelDistance;
+                            dotsRealAngel = cursorRealAngel -dotsCursorDis;
                             mSmoothingTime = System.nanoTime() / NANOTIME_DIV;
                             requestLayout();
                             invalidate();
@@ -271,6 +330,8 @@ public class MyViewGroup extends FrameLayout{
                     } else if (deltaY > 0) {
                         if(realAngel < -initAngel){
                             realAngel += 0.04;
+                            cursorRealAngel = realAngel + angelDistance;
+                            dotsRealAngel = cursorRealAngel -dotsCursorDis;
                             mSmoothingTime = System.nanoTime() / NANOTIME_DIV;
                             requestLayout();
                             invalidate();
