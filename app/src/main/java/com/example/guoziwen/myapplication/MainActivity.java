@@ -13,6 +13,18 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AutoScrollTextView num_h  = (AutoScrollTextView)findViewById(R.id.score_h);
+        AutoScrollTextView num_t  = (AutoScrollTextView)findViewById(R.id.score_t);
+        AutoScrollTextView num_u  = (AutoScrollTextView)findViewById(R.id.score_u);
+        num_h.setMode(AutoScrollTextView.Mode.DOWN);
+        num_h.setNumber(0);
+        num_h.setTargetNumber(6);
+        num_t.setMode(AutoScrollTextView.Mode.DOWN);
+        num_t.setNumber(1);
+        num_t.setTargetNumber(9);
+        num_u.setMode(AutoScrollTextView.Mode.DOWN);
+        num_u.setNumber(2);
+        num_u.setTargetNumber(8);
     }
 
 

@@ -187,13 +187,39 @@
             android:textColor="@android:color/white"
             android:textSize="26sp" />
 
-        <TextView
+        <!--<TextView
             android:id="@+id/score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="698"
             android:textColor="@android:color/white"
-            android:textSize="78sp" />
+            android:visibility="gone"
+            android:textSize="78sp" />-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <com.example.guoziwen.myapplication.AutoScrollTextView
+                android:id="@+id/score_h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
+            <com.example.guoziwen.myapplication.AutoScrollTextView
+                android:id="@+id/score_t"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
+            <com.example.guoziwen.myapplication.AutoScrollTextView
+                android:id="@+id/score_u"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"/>
+            </LinearLayout>
 
         <TextView
             android:id="@+id/update_time"
