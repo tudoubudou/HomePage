@@ -1,12 +1,9 @@
 package com.example.guoziwen.myapplication;
 
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.graphics.SweepGradient;
 import android.util.AttributeSet;
@@ -19,8 +16,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Scroller;
-import android.widget.Toast;
 
 /**
  * Created by guoziwen on 15/3/29.
@@ -43,18 +38,24 @@ public class MyViewGroup extends FrameLayout{
     private static final float SMOOTHING_CONSTANT = (float) (0.016 / Math.log(SMOOTHING_SPEED));
     private float mSmoothingTime;
     private float mTouchX;
-    private double initAngel = -Math.PI/6;
-    private double realAngel = initAngel;
+    private double initAngle = -Math.PI/6;
+    private double realAngle = initAngle;
+    private double displayRangeAngle = 2*Math.PI/3;
 
-    private double displayRangeAngel = 2*Math.PI/3;
-    private double angelDistance = Math.PI/4;
 
-    private double cursorRealAngel = initAngel + angelDistance;
+    private double cursorInitAngle = Math.PI/12;
+    private double cursorRealAngle = cursorInitAngle;
+    private double angleDistance = cursorRealAngle - realAngle;
 
-    private double dotsInitAngel = -Math.PI/2;
-    private double dotsRealAngel = dotsInitAngel;
-    private double dotsAngelInterval = Math.PI/6;
-    private double dotsCursorDis = cursorRealAngel - dotsInitAngel;
+    private double dotsInitAngle = -2 * Math.PI/3;
+    private double dotsRealAngle = dotsInitAngle;
+    private double dotsAngleInterval = Math.PI/6;
+    private double dotsCursorDis = cursorRealAngle - dotsRealAngle;
+
+    private double calibInitAngle = -2 * Math.PI/3;
+    private double calibRealAngle = calibInitAngle;
+    private double calibAngleInterval = Math.PI/6;
+    private double calibCursorDis = cursorRealAngle - calibRealAngle;
 
     private float circleR = 480.0f;
     private float circleX = -90.0f;
@@ -64,6 +65,16 @@ public class MyViewGroup extends FrameLayout{
     public final String cursor_tag = "image_cursor_tag";
     ImageView circleCursor;
 
+    private int score = 698;
+    public void setScore(int score){
+        this.score = score;
+    }
+
+    private int getStartCalib(){
+        int visibleCalib = (int)( Math.PI / 2 * calibAngleInterval);
+        int unVisibleCalib = (int)(- calibInitAngle / calibAngleInterval);
+        return ((score - 100 * (unVisibleCalib + visibleCalib/2))/100) *100;
+    }
 
     public MyViewGroup(Context context) {
         this(context, null);
@@ -80,6 +91,7 @@ public class MyViewGroup extends FrameLayout{
     /**
      * Initializes various states for this workspace.
      */
+
     private void init() {
         Context context = getContext();
         screenH = this.getContext().getResources().getDisplayMetrics().heightPixels;
@@ -101,25 +113,25 @@ public class MyViewGroup extends FrameLayout{
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         final int count = getChildCount();
-        double step = displayRangeAngel / count;
-        double tempAngel = realAngel;
+        double step = displayRangeAngle / count;
+        double tempAngle = realAngle;
         double alpha = 1.0;
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != View.GONE && !(child instanceof ImageView)) {
                 final int childWidth = child.getMeasuredWidth();
                 final int childHeight = child.getMeasuredHeight();
-                int locationX = (int)Math.round((circleR+circle_text_distance) * Math.cos(tempAngel) + (circleX - circle_text_distance));
-                int locationY =screenH - (int)Math.round((circleR+circle_text_distance) * Math.sin(tempAngel) + circleY);
+                int locationX = (int)Math.round((circleR+circle_text_distance) * Math.cos(tempAngle) + (circleX - circle_text_distance));
+                int locationY =screenH - (int)Math.round((circleR+circle_text_distance) * Math.sin(tempAngle) + circleY);
                 child.layout(locationX,locationY,locationX+childWidth,locationY+childHeight);
-                alpha  = -1.0* Math.pow((24 * tempAngel - Math.PI) / (7 * Math.PI) ,2.0) +1.0;
+                alpha  = -1.0* Math.pow((24 * tempAngle - Math.PI) / (7 * Math.PI) ,2.0) +1.0;
                 child.setAlpha((float) alpha);
-                tempAngel +=step;
+                tempAngle +=step;
             }else if(child instanceof ImageView){
                 final int childWidth = child.getMeasuredWidth();
                 final int childHeight = child.getMeasuredHeight();
-                int locationX = (int)Math.round((circleR - circle_stroke_width/2) * Math.cos(cursorRealAngel) + circleX);
-                int locationY = screenH - (int)Math.round((circleR  - circle_stroke_width/2)* Math.sin(cursorRealAngel) + circleY);
+                int locationX = (int)Math.round((circleR - circle_stroke_width/2) * Math.cos(cursorRealAngle) + circleX);
+                int locationY = screenH - (int)Math.round((circleR  - circle_stroke_width/2)* Math.sin(cursorRealAngle) + circleY);
                 child.layout(locationX - childWidth / 2, locationY - childHeight / 2, locationX - childWidth / 2 + childWidth, locationY - childHeight / 2 + childHeight);
                 android.util.Log.e("gzw", " circel R =" + circleR + " x=" + circleX + " y=" + circleY);
             }
@@ -148,7 +160,7 @@ public class MyViewGroup extends FrameLayout{
         paint.setShader(mySweepGrdient);
         RectF r = new RectF(circleX-(circleR - circle_stroke_width / 2),screenH-circleY-(circleR - circle_stroke_width / 2),circleX+(circleR - circle_stroke_width / 2),screenH-circleY+(circleR - circle_stroke_width / 2));
         canvas.save();
-        canvas.rotate((float) (-1.0 * cursorRealAngel * 180.0 / Math.PI), circleX, screenH - circleY);
+        canvas.rotate((float) (-1.0 * cursorRealAngle * 180.0 / Math.PI), circleX, screenH - circleY);
         canvas.drawArc(r, 0, 180, false, paint);
         canvas.restore();
         if(circleCursor != null){
@@ -159,20 +171,49 @@ public class MyViewGroup extends FrameLayout{
             int x = circleCursor.getLeft() + circleCursor.getWidth()/2;
             int y = circleCursor.getTop() + circleCursor.getHeight()/2;
             canvas.drawCircle(x,y,circleCursor.getWidth()/3,paint);
-            paint.setColor(Color.WHITE);
-            canvas.save();
-            for(double temp = dotsRealAngel;temp < Math.PI;temp += dotsAngelInterval){
-                if(Math.abs(temp - cursorRealAngel) > dotsAngelInterval/2 && temp < cursorRealAngel){
-                    if(temp == dotsRealAngel){
-                        canvas.rotate((float)(-dotsRealAngel * 180 / Math.PI),circleX, screenH - circleY);
-                    }else {
-                        canvas.rotate((float)(-dotsAngelInterval * 180 / Math.PI),circleX, screenH - circleY);
-                    }
-                    canvas.drawCircle(circleX + circleR - circle_stroke_width /2,screenH - circleY - circle_stroke_width /2,circleCursor.getWidth()/12,paint);
+        }//draw cursor complete
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
+        canvas.save();
+        for(double temp = dotsRealAngle;temp < Math.PI;temp += dotsAngleInterval){
+            if(Math.abs(temp - cursorRealAngle) > dotsAngleInterval/3 && temp < cursorRealAngle){
+                if(temp == dotsRealAngle){
+                    canvas.rotate((float)(-dotsRealAngle * 180 / Math.PI),circleX, screenH - circleY);
+                }else {
+                    canvas.rotate((float)(-dotsAngleInterval * 180 / Math.PI),circleX, screenH - circleY);
                 }
+                canvas.drawCircle(circleX + circleR - circle_stroke_width /2,screenH - circleY - circle_stroke_width /2,circle_stroke_width/6,paint);
             }
-            canvas.restore();
         }
+        canvas.restore();//draw dots complete
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
+        paint.setAlpha(128);
+        paint.setTextSize(28);
+        paint.setTextAlign(Paint.Align.CENTER);
+        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+        int fontHeight = (int)(fontMetrics.bottom - fontMetrics.ascent);
+        int fontWidth = (int)paint.measureText("000");
+        canvas.save();
+        int calib = getStartCalib();
+        for(double temp = calibRealAngle;temp < Math.PI;temp += calibAngleInterval){
+            if(temp == calibRealAngle){
+                canvas.rotate((float)(-calibRealAngle * 180 / Math.PI),circleX, screenH - circleY);
+                canvas.rotate((float)(calibRealAngle * 180 / Math.PI),circleX + circleR - fontWidth * 2 / 3 - circle_stroke_width, screenH - circleY - 2);
+                canvas.drawText(String.valueOf(calib), circleX + circleR - fontWidth * 2 / 3 - circle_stroke_width, screenH - circleY - 2, paint);
+                canvas.rotate((float) (-calibRealAngle * 180 / Math.PI), circleX + circleR - fontWidth * 2 / 3 - circle_stroke_width, screenH - circleY - 2);
+            }else {
+                canvas.rotate((float)(-calibAngleInterval * 180 / Math.PI),circleX, screenH - circleY);
+                canvas.rotate((float)(temp * 180 / Math.PI),circleX + circleR - fontWidth * 2 / 3 - circle_stroke_width, screenH - circleY - 2);
+                canvas.drawText(String.valueOf(calib), circleX + circleR - fontWidth * 2 / 3 - circle_stroke_width, screenH - circleY - 2, paint);
+                canvas.rotate((float) (-temp * 180 / Math.PI), circleX + circleR - fontWidth * 2 / 3 - circle_stroke_width, screenH - circleY - 2);
+
+            }
+            calib += 100;
+        }
+        canvas.restore();//draw calib complete
         super.dispatchDraw(canvas);
     }
     private void acquireVelocityTrackerAndAddMovement(MotionEvent ev) {
@@ -318,20 +359,22 @@ public class MyViewGroup extends FrameLayout{
                     android.util.Log.e("gzw","moving! in onTouch scrolling");
 
                     if (deltaY < 0) {
-                        if(realAngel > initAngel - Math.PI/6){
-                            realAngel -= 0.04;
-                            cursorRealAngel = realAngel + angelDistance;
-                            dotsRealAngel = cursorRealAngel -dotsCursorDis;
+                        if(realAngle > initAngle - Math.PI/6){
+                            realAngle -= 0.04;
+                            cursorRealAngle = realAngle + angleDistance;
+                            dotsRealAngle = cursorRealAngle -dotsCursorDis;
+                            calibRealAngle = cursorRealAngle - calibCursorDis;
                             mSmoothingTime = System.nanoTime() / NANOTIME_DIV;
                             requestLayout();
                             invalidate();
                             android.util.Log.e("gzw","move down");
                         }
                     } else if (deltaY > 0) {
-                        if(realAngel < -initAngel){
-                            realAngel += 0.04;
-                            cursorRealAngel = realAngel + angelDistance;
-                            dotsRealAngel = cursorRealAngel -dotsCursorDis;
+                        if(realAngle < -initAngle){
+                            realAngle += 0.04;
+                            cursorRealAngle = realAngle + angleDistance;
+                            dotsRealAngle = cursorRealAngle -dotsCursorDis;
+                            calibRealAngle = cursorRealAngle - calibCursorDis;
                             mSmoothingTime = System.nanoTime() / NANOTIME_DIV;
                             requestLayout();
                             invalidate();
@@ -378,11 +421,11 @@ public class MyViewGroup extends FrameLayout{
         }
     }
 
-    public double getRealAngel(){
-        return realAngel;
+    public double getRealAngle(){
+        return realAngle;
     }
-    public void setRealAngel(double realAngel){
-        this.realAngel = realAngel;
+    public void setRealAngle(double realAngle){
+        this.realAngle = realAngle;
     }
 
 
